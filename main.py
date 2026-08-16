@@ -1,5 +1,3 @@
-from math import fabs
-
 import tm_t20 as tm
 
 printer = tm.TMT20(
