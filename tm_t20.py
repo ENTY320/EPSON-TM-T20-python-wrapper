@@ -10,7 +10,7 @@ Communication:
 
 Example:
     printer = TMT20(
-        senddat=r"C:\Epson\Senddat.exe",
+        senddat=r"C:/Epson/Senddat.exe",
         usb_port="USBPRN0"
     )
 
@@ -50,11 +50,11 @@ class TMT20:
     # ---------------------------------------------------------
 
     def __init__(
-        self,
-        senddat: str = r"C:\Epson\Senddat.exe",
-        usb_port: str = "USBPRN0",
-        encoding: str = "cp852",
-        keep_script: bool = False,
+            self,
+            senddat: str = r"C:\Epson\Senddat.exe",
+            usb_port: str = "USBPRN0",
+            encoding: str = "cp852",
+            keep_script: bool = False,
     ):
         self.senddat = Path(senddat)
         self.usb_port = usb_port
@@ -177,7 +177,7 @@ class TMT20:
         """
 
         if not 0 <= lines <= 255:
-            raise ValueError("lines must be 0..255")
+            raise ValueError("lines must be 0-255")
 
         return self.bytes(
             0x1B, 0x64, lines
@@ -191,7 +191,7 @@ class TMT20:
         """
 
         if not 0 <= dots <= 255:
-            raise ValueError("dots must be 0..255")
+            raise ValueError("dots must be 0-255")
 
         return self.bytes(
             0x1B, 0x4A, dots
@@ -301,14 +301,14 @@ class TMT20:
         GS ! n
 
         Width/height:
-            1..8
+            1-8
         """
 
         if not 1 <= width <= 8:
-            raise ValueError("width must be 1..8")
+            raise ValueError("width must be 1-8")
 
         if not 1 <= height <= 8:
-            raise ValueError("height must be 1..8")
+            raise ValueError("height must be 1-8")
 
         n = ((width - 1) << 4) | (height - 1)
 
@@ -381,7 +381,7 @@ class TMT20:
         """
 
         if not 0 <= table <= 255:
-            raise ValueError("table must be 0..255")
+            raise ValueError("table must be 0-255")
 
         return self.bytes(
             0x1B,
@@ -410,7 +410,7 @@ class TMT20:
         """
 
         if not 0 <= dots <= 255:
-            raise ValueError("dots must be 0..255")
+            raise ValueError("dots must be 0-255")
 
         return self.bytes(
             0x1B,
@@ -428,7 +428,7 @@ class TMT20:
         """
 
         if not 0 <= dots <= 255:
-            raise ValueError("dots must be 0..255")
+            raise ValueError("dots must be 0-255")
 
         return self.bytes(
             0x1B,
@@ -458,7 +458,7 @@ class TMT20:
         """
 
         if not 0 <= position <= 65535:
-            raise ValueError("position must be 0..65535")
+            raise ValueError("position must be 0-65535")
 
         return self.bytes(
             0x1B,
@@ -476,7 +476,7 @@ class TMT20:
 
         if not -32768 <= position <= 32767:
             raise ValueError(
-                "position must be -32768..32767"
+                "position must be -32768-32767"
             )
 
         if position < 0:
@@ -491,7 +491,7 @@ class TMT20:
 
     def tabs(self, positions: Iterable[int]):
         """
-        ESC D ...
+        ESC D -.
 
         Define horizontal tab positions.
         """
@@ -503,7 +503,7 @@ class TMT20:
         for p in positions:
             if not 1 <= p <= 255:
                 raise ValueError(
-                    "tab positions must be 1..255"
+                    "tab positions must be 1-255"
                 )
 
             self.byte(p)
@@ -550,10 +550,10 @@ class TMT20:
     # =========================================================
 
     def bit_image(
-        self,
-        data: bytes,
-        width_bytes: int,
-        mode: int = 0,
+            self,
+            data: bytes,
+            width_bytes: int,
+            mode: int = 0,
     ):
         """
         ESC * m nL nH
@@ -595,7 +595,7 @@ class TMT20:
         """
 
         if not 1 <= height <= 255:
-            raise ValueError("height must be 1..255")
+            raise ValueError("height must be 1-255")
 
         return self.bytes(
             0x1D,
@@ -607,11 +607,11 @@ class TMT20:
         """
         GS w n
 
-        2..6
+        2-6
         """
 
         if not 2 <= width <= 6:
-            raise ValueError("width must be 2..6")
+            raise ValueError("width must be 2-6")
 
         return self.bytes(
             0x1D,
@@ -620,8 +620,8 @@ class TMT20:
         )
 
     def barcode_text(
-        self,
-        position: int = 2,
+            self,
+            position: int = 2,
     ):
         """
         GS H n
@@ -656,12 +656,12 @@ class TMT20:
         )
 
     def barcode(
-        self,
-        barcode_type: int,
-        data: str | bytes,
+            self,
+            barcode_type: int,
+            data: str | bytes,
     ):
         """
-        GS k m ...
+        GS k m -.
 
         Raw ESC/POS barcode interface.
 
@@ -677,7 +677,7 @@ class TMT20:
             barcode_type
         )
 
-        # Types 0..6 use NUL terminated data.
+        # Types 0-6 use NUL terminated data.
         if barcode_type <= 6:
             self.raw(data)
             self.byte(0)
@@ -705,7 +705,7 @@ class TMT20:
         """
 
         if not 1 <= size <= 16:
-            raise ValueError("QR size must be 1..16")
+            raise ValueError("QR size must be 1-16")
 
         return self.bytes(
             0x1D,
@@ -731,7 +731,7 @@ class TMT20:
 
         if level not in (48, 49, 50, 51):
             raise ValueError(
-                "QR correction must be 48..51"
+                "QR correction must be 48-51"
             )
 
         return self.bytes(
@@ -786,10 +786,10 @@ class TMT20:
         return self
 
     def qrcode(
-        self,
-        data: str,
-        size: int = 4,
-        error_correction: str = "M",
+            self,
+            data: str,
+            size: int = 4,
+            error_correction: str = "M",
     ):
         """
         Convenience QR function.
@@ -843,9 +843,9 @@ class TMT20:
     # =========================================================
 
     def drawer(
-        self,
-        pin: int = 0,
-        duration: int = 4,
+            self,
+            pin: int = 0,
+            duration: int = 4,
     ):
         """
         DLE DC4 fn=1
@@ -855,7 +855,7 @@ class TMT20:
             1 = drawer pin 5
 
         duration:
-            1..8
+            1-8
 
         ON = duration * 100 ms
         OFF = duration * 100 ms
@@ -866,7 +866,7 @@ class TMT20:
 
         if not 1 <= duration <= 8:
             raise ValueError(
-                "duration must be 1..8"
+                "duration must be 1-8"
             )
 
         return self.bytes(
@@ -964,7 +964,7 @@ class TMT20:
 
         if not 1 <= status_type <= 4:
             raise ValueError(
-                "status_type must be 1..4"
+                "status_type must be 1-4"
             )
 
         return self.bytes(
@@ -1155,8 +1155,8 @@ class TMT20:
         if self.keep_script:
 
             filename = (
-                Path.cwd() /
-                "tm_t20_senddat.txt"
+                    Path.cwd() /
+                    "tm_t20_senddat.txt"
             )
 
             filename.write_text(
@@ -1193,7 +1193,6 @@ class TMT20:
             )
 
             if result.returncode != 0:
-
                 raise TMT20Error(
                     "Send Data Tool failed.\n\n"
                     f"Return code: {result.returncode}\n"
@@ -1231,7 +1230,6 @@ class TMT20:
 # =============================================================
 
 if __name__ == "__main__":
-
     printer = TMT20(
         senddat=r"./senddat.exe",
         usb_port="USBPRN0",
