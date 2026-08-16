@@ -34,5 +34,5 @@ while True:
 	printer.lf()
 	printer.lf()
 	printer.lf()
-	printer.cut(partial=0)
+	printer.cut()
 
