@@ -8,9 +8,6 @@ printer.init()
 printer.align("center")
 printer.bold(True)
 
-
-
-
 while True:
 	while True:
 		text = input("text to send or qr or cut:")
