@@ -1,0 +1,30 @@
+' Sample script of senddat
+' Version 0.01
+
+'Comment line is starting ' character
+!Display line is starting ! character
+.Pause line is starting . character
+
+
+'Decimal data
+48 49 50 51 CR LF
+
+'Hexadecimal data
+30h 31h 32h CR LF
+0x33 0x34 0x35 CR LF
+$36 $37 $38 CR LF
+
+'String data 1
+string1 CR LF
+
+'String data 2
+"string2" CR LF
+
+'Special characters
+"\"" CR LF
+"\'" CR LF
+"\\" CR LF
+"\0" CR LF
+
+'Wait 3 seconds
+*3000
